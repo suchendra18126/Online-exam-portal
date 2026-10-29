@@ -5,14 +5,14 @@ class UserRegister(BaseModel):
     name: str
     email: EmailStr
     password: str
-    role: str = "student" # 'student', 'teacher', 'admin'
+    role: str = "student"
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
 class DemoLoginRequest(BaseModel):
-    role: str # 'student', 'teacher', 'admin'
+    role: str
 
 class UserResponse(BaseModel):
     id: str
@@ -29,10 +29,10 @@ class TokenResponse(BaseModel):
 class QuestionSchema(BaseModel):
     id: Optional[str] = None
     question_text: str
-    type: str = "mcq" # 'mcq', 'tf', 'short'
+    type: str = "mcq"
     options: List[str] = []
-    correct_option: int = 0 # 0-indexed for MCQ/TF
-    correct_answer_text: Optional[str] = None # For short answer
+    correct_option: int = 0
+    correct_answer_text: Optional[str] = None
     marks: int = 1
     explanation: Optional[str] = ""
 
@@ -47,6 +47,9 @@ class ExamCreate(BaseModel):
     shuffle_questions: bool = True
     show_results_immediately: bool = True
     is_published: bool = True
+    # Scheduled exam time fields
+    scheduled_start: Optional[str] = None   # ISO datetime string
+    scheduled_end: Optional[str] = None     # ISO datetime string
     questions: List[QuestionSchema]
 
 class ExamResponse(BaseModel):
@@ -62,6 +65,8 @@ class ExamResponse(BaseModel):
     show_results_immediately: bool
     is_published: bool
     question_count: int
+    scheduled_start: Optional[str] = None
+    scheduled_end: Optional[str] = None
     questions: Optional[List[QuestionSchema]] = None
     created_by: Optional[str] = None
     created_at: Optional[str] = None
